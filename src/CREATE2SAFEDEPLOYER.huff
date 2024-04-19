@@ -1,0 +1,43 @@
+// Optimized Create2Deployer Contract in Huff
+// This implementation allows for efficient contract deployment using the CREATE2 opcode.
+// The main advantage of this Huff version is the significant reduction in bytecode size and gas consumption.
+
+// safe create2 addr: 0x0000000000ffe8b47b3e2130213b802212439497
+// original bytecode: 2099 length
+// Huff bytecode:        0x602b8060093d393df33d358060601c331461000f573d3dfd5b602036038060203d373d34f580610023573dfd5b3d526014600cf3
+// Huff init code hash:  0x7a9953c24b9428f1afe09b7a66265c1fc4be15f8165239d9a0bd6610afbaa02e
+// addr generated with create2crunch
+
+#define macro __DISPATCHER(z0) = takes(0) returns(0) {
+  <z0> calldataload               // bytes32(salt)
+  dup1 0x60 shr                   // bytes32(salt), address
+  caller eq noFrontrun jumpi
+  <z0> <z0> revert 
+
+  noFrontrun:
+
+  0x20 calldatasize sub           // bytes32(salt), 0x20, (bytecode size = calldatasize - 0x20)
+  dup1                            // bytes32(salt), 0x20, bytecode_size, bytecode_size
+  0x20                            // bytes32(salt), bytecode_size, bytecode_size, 0x20
+  <z0>                            // bytes32(salt), bytecode_size, bytecode_size, 0x20, 0x00
+  calldatacopy                    // bytes32(salt), bytecode_size,
+
+  <z0>                            // bytes32(salt), bytecode_size, 0x00
+  callvalue                       // bytes32(salt), bytecode_size, 0x00, callvalue
+  create2                         // deployed address
+  
+  // if deployedAddress != 0x00: goto creationOkJump
+  dup1 creationOkJump jumpi       // 0xff...e0 + calldatasize, 0x00, hash, deployedAddress
+
+  // if deployedAddress == 0x00 revert using invalid opcode  
+  <z0> revert
+  
+  creationOkJump:
+    // return the deployed address
+    <z0> mstore
+    0x14 0x0c return
+}
+
+#define macro MAIN() = takes(0) returns(0) {
+  __DISPATCHER(returndatasize)
+}
