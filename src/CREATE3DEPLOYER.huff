@@ -1,0 +1,97 @@
+
+// Proxy Constants
+#define constant PROXY_BYTECODE =      0x69363d3d37363d34f033ff3d52600a6016f30000000000000000000000000000
+#define constant PROXY_BYTECODE_HASH = 0xa58613f86adbc0573cef164d1558bf6d30464e5cd9ea80ff0d900f04b870a303
+
+#define macro BUILD_SALT(z0) = takes (0) returns (1) { 
+  __RIGHTPAD(0xFFFFFFFFFFFFFFFFFFFFFFFF)
+  <z0> calldataload and  
+  origin add
+}
+
+#define macro COPYCODE(z0) = takes (0) returns (1) { 
+  0x20 calldatasize sub      // codesize, 0x20
+  dup1                       // codesize, codesize, 0x20
+  0x20                      // 0x20, codesize, codesize
+  <z0>                       // 0x00, 0x20, codesize, codesize
+  calldatacopy               // calldatacopy(0x00, 0x20, codesize)
+  // final stack: codesize
+}
+
+/// @notice Deploy a new contract with our pre-made bytecode via CREATE2
+#define macro CREATE_3_DEPLOY(z0) = takes (3) returns (1) {
+    // Input Stack: [salt, &creationCode, value]
+    // Output Stack: [deployed]
+
+    // Create the proxy
+    0x12                                   // [size, salt, &creationCode, value]
+
+    // Shift the proxy bytecode left
+    [PROXY_BYTECODE]                            // [bytecode, size, salt, salt, &creationCode, value, bytecode]
+    <z0> mstore                                 // [size, salt, salt, &creationCode, value]
+    <z0>                                        // [offset, size, salt, salt, &creationCode, value]
+    <z0>                                        // [value, offset, size, salt, salt, &creationCode, value]
+    create2                                     // [address, salt, &creationCode, value]
+
+    // Check the address of of the proxy is not null
+    dup1 done_deploy_proxy jumpi                // [address, address, salt, &creationCode, value]
+    // deploy failed
+    <z0> <z0> revert                            // [0x00 0x00 revert, address, salt, &creationCode, value]
+
+    done_deploy_proxy:
+}
+
+#define macro __DISPATCHER(z0) = takes (0) returns (0) { 
+  
+  BUILD_SALT(<z0>)          // salt
+  CREATE_3_DEPLOY(<z0>)     // address
+
+  <z0>                      // 0x00, address
+  <z0>                      // 0x00, 0x00, address
+  COPYCODE(<z0>)            // codesize, 0x00, 0x00, address
+  <z0>                      // 0x00, codesize, 0x00, 0x00, address
+  callvalue                 // value, 0x00, codesize, 0x00, 0x00, address
+  dup6                      // address, value, 0x00, codesize, 0x00, 0x00, address
+  gas                       // gas, address, value, 0x00, codesize, 0x00, 0x00, address
+  call                      // success, address
+
+  iszero JMPdeployCodeFail jumpi
+  PREDICT_DEPLOYMENT(<z0>)
+  dup1 extcodesize                // [deployed == 0, deployed
+  iszero JMPinit_failed jumpi   
+
+  // return the deployed address
+  <z0> mstore
+  0x14 0x0c return
+
+  JMPdeployCodeFail: 
+    0x00 <z0> revert
+  JMPinit_failed:
+    0x00 <z0> revert
+
+}
+
+#define macro PREDICT_DEPLOYMENT(z0) = takes (1) returns (1) {
+  // @dev this is a modify version of
+  // https://github.com/huff-language/huffmate/blob/4e2c9bd3412ab8cc65f6ceadafc01a1ff1815796/src/utils/CREATE3.huff#L95-L143
+  // current stack: proxy_address
+  //0x60 swap1
+  //dup2 
+  0x60 shl 0x10 shr       // [proxy_address]
+   
+  __RIGHTPAD(0xd694) or
+   
+  // Append a 0x01 to the end of the address
+  0x01 0x48 shl           // [0x01 << 9, [0xd694][proxy_address]]
+  or                      // [ [0xd694][proxy_address][01] ]
+
+  // Hash the packed encoding in memory position 0x00
+  <z0> mstore             // []
+  0x17 <z0> sha3          // [hash]
+  0x60 shl                // [0x60 shl, [0xd694][proxy_address][01]]
+  0x60 shr                // [deploy address]
+}
+
+#define macro MAIN() = takes(0) returns(0) {
+  __DISPATCHER(returndatasize)
+}
