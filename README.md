@@ -1,20 +1,28 @@
-## Foundry
+<p align="center">
+  <img src="./logo2.png" width="128" title="Logo">
+</p>
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+# CreateToolBelt
 
-Foundry consists of:
+Welcome to CreateToolBelt, an innovative suite of smart contract deployment tools designed for the Ethereum blockchain. CreateToolBelt leverages enhanced versions of the CREATE2 and CREATE3 deployment methods, ensuring deterministic deployments across multiple blockchains with added security against front-running.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Features
 
-## Documentation
+- **CREATE2Factory**: A remake of the [CREATE2FACTORY](https://github.com/Arachnid/deterministic-deployment-proxy) but with a few micro optimizations and rewrite in Huff.
+- **CREATE2SafeFactory**: Builds on the security features of CREATE2Factory by addressing specific vulnerabilities associated with frontrunning issues on CREATE2 deployments rewrite in Huff.
+- **Create3Factory**: Allows for the consistent deployment of contracts across multiple blockchains using the same address, utilizing both CREATE2 and CREATE deployment methods. This deployer ensures that the final contract address is consistent, regardless of the blockchain network, by using a fixed deployer address and a deterministic salt rewrite in Huff.
 
-https://book.getfoundry.sh/
+All this contracts are prepared to be deployed using the Arachnid CREATE2FACTORY on [0x4e59b44847b379578588920ca78fbf26c0b4956c](https://etherscan.io/address/0x4e59b44847b379578588920ca78fbf26c0b4956c)
 
-## Usage
 
+### Installation
+
+Clone the repository and install the dependencies:
+
+```bash
+git clone https://github.com/yourusername/CreateToolBelt.git
+cd CreateToolBelt
+```
 ### Build
 
 ```shell
@@ -27,40 +35,12 @@ $ forge build
 $ forge test
 ```
 
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
 ### Deploy
 
 ```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+$ forge script script/Create2Factory.s.sol --rpc-url <your_rpc_url> --private-key <your_private_key>
+$ forge script script/Create2SafeFactory.s.sol --rpc-url <your_rpc_url> --private-key <your_private_key>
+$ forge script script/Create3Factory.s.sol --rpc-url <your_rpc_url> --private-key <your_private_key>
 ```
 
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+> Contract final deployed address of all contracts should be always the same.
