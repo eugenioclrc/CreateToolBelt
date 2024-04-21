@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import {Script, console} from "forge-std/Script.sol";
 import {compile, Vm} from "../test/DeployHelper.sol";
 
-contract CounterScript is Script {
+contract DeployScript is Script {
     using {compile} for Vm;
 
     function setUp() public {}
