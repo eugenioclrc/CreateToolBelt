@@ -16,7 +16,7 @@ contract Create3FactoryTest is Test {
         // CREATE2_FACTORY create2 contract from https://github.com/Arachnid/deterministic-deployment-proxy.
         (bool sucess, bytes memory response) = CREATE2_FACTORY.call(
             abi.encodePacked(
-                bytes32(0xdd6e37e0620a60f41055331e8d0d92956e44eeba56d3192dfd65e1aa1b91f6c5), // salt
+                bytes32(0x4e59b44847b379578588920ca78fbf26c0b4956c0aff5470784fa47dae490020), // salt
                 bytecode
             )
         );
@@ -26,8 +26,8 @@ contract Create3FactoryTest is Test {
         assembly {
             deployed := mload(add(response, 0x14))
         }
+        assertEq(deployed, 0x0000000076D42B9563E28685aE3A7eB304ebD20c, "Failed to deploy CREATE3FACTORY");
 
-        //        assertEq(deployed, 0x00000008C8F9e0892092947ccc041897e8633523, "Failed to deploy CREATE2FACTORY");
         CREATE3FACTORY = deployed;
     }
 
@@ -55,7 +55,7 @@ contract Create3FactoryTest is Test {
             counter := mload(add(response, 0x14))
         }
 
-        address EXPECTED_ADDRESS = 0x5b8CD59A376CE6ca1dc7744D66cf35e4b23f9533;
+        address EXPECTED_ADDRESS = 0x6d10Bc40Bf9211EfE33ea518d7169A278570A045;
         assertEq(address(counter), EXPECTED_ADDRESS, "Counter should always be deployed at the expected address");
 
         assertEq(counter.number(), start, "Counter should be start number");
