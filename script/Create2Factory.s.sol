@@ -9,11 +9,11 @@ contract DeployScript is Script {
 
     function setUp() public {}
 
-    function run() public returns (address create2Factory){
+    function run() public returns (address create2Factory) {
         // Used by default when deploying with create2, https://github.com/Arachnid/deterministic-deployment-proxy.
         require(CREATE2_FACTORY.code.length > 0, "CREATE2FACTORY NOT DEPLOYED!");
         bytes memory bytecode = vm.compile("src/CREATE2FACTORY.huff");
-        
+
         vm.startBroadcast();
         (bool sucess, bytes memory response) = CREATE2_FACTORY.call(
             abi.encodePacked(
