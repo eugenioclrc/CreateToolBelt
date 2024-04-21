@@ -2,8 +2,10 @@
 // This implementation allows for efficient contract deployment using the CREATE2 opcode.
 // The main advantage of this Huff version is the significant reduction in bytecode size and gas consumption.
 
+// create2 contract from https://github.com/Arachnid/deterministic-deployment-proxy.
 // initial create2 addr: 0x4e59b44847b379578588920cA78FbF26c0B4956C
 // original bytecode:    0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3
+// ----------------------------------------
 // Huff bytecode:        0x60158060093d393df33d35602080360380913d373d34f58061001457fe5b
 // Huff init code hash:  0xf6acacf0a69d7d28fcbcdc2c4994077181ded71c6332147322811eb66d5ab0e8
 // addr generated with create2crunch
