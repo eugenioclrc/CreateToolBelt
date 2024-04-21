@@ -11,16 +11,19 @@ contract CounterTest is Test {
 
     address immutable CREATE2DEPLOYER = 0x4e59b44847b379578588920cA78FbF26c0B4956C;
     address HUFFCREATE2DEPLOYER;
+
     function setUp() public {
         require(CREATE2DEPLOYER.code.length > 0, "CREATE2DEPLOYER NOT DEPLOYED!");
 
         bytes memory bytecode = vm.compile("src/CREATE2SAFEDEPLOYER.huff");
-        (bool sucess, bytes memory response) = CREATE2DEPLOYER.call(abi.encodePacked(
-            bytes32(0xdd6e37e0620a60f41055331e8d0d92956e44eeba56d3192dfd65e1aa1b91f6c5), // salt
-            bytecode
-        ));
+        (bool sucess, bytes memory response) = CREATE2DEPLOYER.call(
+            abi.encodePacked(
+                bytes32(0xdd6e37e0620a60f41055331e8d0d92956e44eeba56d3192dfd65e1aa1b91f6c5), // salt
+                bytecode
+            )
+        );
         assertTrue(sucess, "Failed to deploy CREATE2DEPLOYER");
-        
+
         address deployed;
         assembly {
             deployed := mload(add(response, 0x14))
@@ -30,21 +33,29 @@ contract CounterTest is Test {
         HUFFCREATE2DEPLOYER = deployed;
     }
 
-    function test_Increment() public {
-        (bool sucess, bytes memory response) = HUFFCREATE2DEPLOYER.call(abi.encodePacked(
-            bytes32(keccak256("salt")),
-            type(Counter).creationCode)
+    function test_deployCreate2(uint256 start) public {
+        start = bound(start, 0, type(uint256).max - 1);
+
+        // @dev note that the bytecode cant be frontrunned
+        (bool sucess, bytes memory response) = HUFFCREATE2DEPLOYER.call(
+            abi.encodePacked(bytes32(keccak256("salt")), abi.encodePacked(type(Counter).creationCode), start)
         );
         assertFalse(sucess, "show return false due missing frontrun protection");
-        
-        /*
+
+        (sucess, response) = HUFFCREATE2DEPLOYER.call(
+            abi.encodePacked(
+                bytes32(abi.encodePacked(address(this), bytes12(keccak256("salt")))),
+                abi.encodePacked(type(Counter).creationCode),
+                start
+            )
+        );
+
         Counter counter;
         assembly {
             counter := mload(add(response, 0x14))
         }
+        assertEq(counter.number(), start, "Counter should be start number");
         counter.increment();
-
-        assertEq(counter.number(), 1, "Counter should be 1");
-        */
+        assertEq(counter.number(), start + 1, "Counter should be start number + 1");
     }
 }

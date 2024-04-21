@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 contract Counter {
     uint256 public number;
-    address immutable public owner;
+    address public immutable owner;
 
     constructor(uint256 _number) {
         number = _number;
