@@ -9,10 +9,10 @@ import {compile, Vm} from "./DeployHelper.sol";
 contract CounterTest is Test {
     using {compile} for Vm;
 
-    address CREATE3DEPLOYER;
+    address CREATE3FACTORY;
 
     function setUp() public {
-        bytes memory bytecode = vm.compile("src/CREATE3DEPLOYER.huff");
+        bytes memory bytecode = vm.compile("src/CREATE3FACTORY.huff");
         // CREATE2_FACTORY create2 contract from https://github.com/Arachnid/deterministic-deployment-proxy.
         (bool sucess, bytes memory response) = CREATE2_FACTORY.call(
             abi.encodePacked(
@@ -20,25 +20,25 @@ contract CounterTest is Test {
                 bytecode
             )
         );
-        assertTrue(sucess, "Failed to deploy CREATE2DEPLOYER");
+        assertTrue(sucess, "Failed to deploy CREATE2FACTORY");
 
         address deployed;
         assembly {
             deployed := mload(add(response, 0x14))
         }
 
-        //        assertEq(deployed, 0x00000008C8F9e0892092947ccc041897e8633523, "Failed to deploy CREATE2DEPLOYER");
-        CREATE3DEPLOYER = deployed;
+        //        assertEq(deployed, 0x00000008C8F9e0892092947ccc041897e8633523, "Failed to deploy CREATE2FACTORY");
+        CREATE3FACTORY = deployed;
     }
 
     function test_deployCreate3Counter(uint256 start) public {
         start = bound(start, 0, type(uint256).max - 1);
 
         (bool sucess, bytes memory response) =
-            CREATE3DEPLOYER.call(abi.encodePacked(bytes32(keccak256("salt")), type(Counter).creationCode));
+            CREATE3FACTORY.call(abi.encodePacked(bytes32(keccak256("salt")), type(Counter).creationCode));
         assertFalse(sucess, "show return false due missing frontrun protection");
 
-        (sucess, response) = CREATE3DEPLOYER.call(
+        (sucess, response) = CREATE3FACTORY.call(
             abi.encodePacked(
                 bytes32(abi.encodePacked(address(this), bytes12(keccak256("salt")))),
                 type(Counter).creationCode,

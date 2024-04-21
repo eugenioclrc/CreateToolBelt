@@ -9,10 +9,10 @@ import {compile, Vm} from "./DeployHelper.sol";
 contract CounterTest is Test {
     using {compile} for Vm;
 
-    address HUFFCREATE2DEPLOYER;
+    address HUFFCREATE2FACTORY;
 
     function setUp() public {
-        bytes memory bytecode = vm.compile("src/CREATE2DEPLOYER.huff");
+        bytes memory bytecode = vm.compile("src/CREATE2FACTORY.huff");
         // CREATE2_FACTORY create2 contract from https://github.com/Arachnid/deterministic-deployment-proxy.
         (bool sucess, bytes memory response) = CREATE2_FACTORY.call(
             abi.encodePacked(
@@ -20,15 +20,15 @@ contract CounterTest is Test {
                 bytecode
             )
         );
-        assertTrue(sucess, "Failed to deploy CREATE2DEPLOYER");
+        assertTrue(sucess, "Failed to deploy CREATE2FACTORY");
 
         address deployed;
         assembly {
             deployed := mload(add(response, 0x14))
         }
 
-        assertEq(deployed, 0x0000000004E9754d5589C4C3859dB89282Bedb2a, "Failed to deploy CREATE2DEPLOYER");
-        HUFFCREATE2DEPLOYER = deployed;
+        assertEq(deployed, 0x0000000004E9754d5589C4C3859dB89282Bedb2a, "Failed to deploy CREATE2FACTORY");
+        HUFFCREATE2FACTORY = deployed;
     }
 
     function test_deployCreate2Counter(uint256 start) public {
@@ -36,7 +36,7 @@ contract CounterTest is Test {
 
         // @dev note that the bytecode could be frontrunned, if you got a `tx.origin` in the constructor could be troubles
 
-        (bool sucess, bytes memory response) = HUFFCREATE2DEPLOYER.call(
+        (bool sucess, bytes memory response) = HUFFCREATE2FACTORY.call(
             abi.encodePacked(bytes32(keccak256("salt")), abi.encodePacked(type(Counter).creationCode), start)
         );
         assertTrue(sucess, "Failed to deploy Counter");

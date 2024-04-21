@@ -9,37 +9,37 @@ import {compile, Vm} from "./DeployHelper.sol";
 contract CounterTest is Test {
     using {compile} for Vm;
 
-    address HUFFCREATE2DEPLOYER;
+    address HUFFCREATE2FACTORY;
 
     function setUp() public {
-        bytes memory bytecode = vm.compile("src/CREATE2SAFEDEPLOYER.huff");
+        bytes memory bytecode = vm.compile("src/CREATE2SAFEFACTORY.huff");
         (bool sucess, bytes memory response) = CREATE2_FACTORY.call(
             abi.encodePacked(
                 bytes32(0xdd6e37e0620a60f41055331e8d0d92956e44eeba56d3192dfd65e1aa1b91f6c5), // salt
                 bytecode
             )
         );
-        assertTrue(sucess, "Failed to deploy CREATE2DEPLOYER");
+        assertTrue(sucess, "Failed to deploy CREATE2FACTORY");
 
         address deployed;
         assembly {
             deployed := mload(add(response, 0x14))
         }
 
-        assertEq(deployed, 0x00000008C8F9e0892092947ccc041897e8633523, "Failed to deploy CREATE2DEPLOYER");
-        HUFFCREATE2DEPLOYER = deployed;
+        assertEq(deployed, 0x00000008C8F9e0892092947ccc041897e8633523, "Failed to deploy CREATE2FACTORY");
+        HUFFCREATE2FACTORY = deployed;
     }
 
     function test_deployCreate2safeCounter(uint256 start) public {
         start = bound(start, 0, type(uint256).max - 1);
 
         // @dev note that the bytecode cant be frontrunned
-        (bool sucess, bytes memory response) = HUFFCREATE2DEPLOYER.call(
+        (bool sucess, bytes memory response) = HUFFCREATE2FACTORY.call(
             abi.encodePacked(bytes32(keccak256("salt")), abi.encodePacked(type(Counter).creationCode), start)
         );
         assertFalse(sucess, "show return false due missing frontrun protection");
 
-        (sucess, response) = HUFFCREATE2DEPLOYER.call(
+        (sucess, response) = HUFFCREATE2FACTORY.call(
             abi.encodePacked(
                 bytes32(abi.encodePacked(address(this), bytes12(keccak256("salt")))),
                 abi.encodePacked(type(Counter).creationCode),
