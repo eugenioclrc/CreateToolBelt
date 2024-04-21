@@ -6,7 +6,7 @@ import {Counter} from "../src/Counter.sol";
 import {compile, Vm} from "./DeployHelper.sol";
 
 // This test demonstrates how to deploy a contract using CREATE2 the huff version
-contract CounterTest is Test {
+contract Create3FactoryTest is Test {
     using {compile} for Vm;
 
     address CREATE3FACTORY;
