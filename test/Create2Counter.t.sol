@@ -9,14 +9,13 @@ import {compile, Vm} from "./DeployHelper.sol";
 contract CounterTest is Test {
     using {compile} for Vm;
 
-    address immutable CREATE2DEPLOYER = 0x4e59b44847b379578588920cA78FbF26c0B4956C;
     address HUFFCREATE2DEPLOYER;
 
     function setUp() public {
-        require(CREATE2DEPLOYER.code.length > 0, "CREATE2DEPLOYER NOT DEPLOYED!");
 
         bytes memory bytecode = vm.compile("src/CREATE2DEPLOYER.huff");
-        (bool sucess, bytes memory response) = CREATE2DEPLOYER.call(
+        // CREATE2_FACTORY create2 contract from https://github.com/Arachnid/deterministic-deployment-proxy.
+        (bool sucess, bytes memory response) = CREATE2_FACTORY.call(
             abi.encodePacked(
                 bytes32(0x4e59b44847b379578588920ca78fbf26c0b4956c93cba124c4fab5b9c54d01c0), // salt
                 bytecode
@@ -33,7 +32,7 @@ contract CounterTest is Test {
         HUFFCREATE2DEPLOYER = deployed;
     }
 
-    function test_deployCreate2(uint256 start) public {
+    function test_deployCreate2Counter(uint256 start) public {
         start = bound(start, 0, type(uint256).max - 1);
 
         // @dev note that the bytecode could be frontrunned, if you got a `tx.origin` in the constructor could be troubles
@@ -42,11 +41,13 @@ contract CounterTest is Test {
             abi.encodePacked(bytes32(keccak256("salt")), abi.encodePacked(type(Counter).creationCode), start)
         );
         assertTrue(sucess, "Failed to deploy Counter");
+
+        // @dev note that the bytecode is always different due the start param at constructor, therefore the deployed address is always different
+
         Counter counter;
         assembly {
             counter := mload(add(response, 0x14))
         }
-
         assertEq(counter.number(), start, "Counter should be start number");
         counter.increment();
         assertEq(counter.number(), start + 1, "Counter should be start number + 1");

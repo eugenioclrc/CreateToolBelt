@@ -9,14 +9,12 @@ import {compile, Vm} from "./DeployHelper.sol";
 contract CounterTest is Test {
     using {compile} for Vm;
 
-    address immutable CREATE2DEPLOYER = 0x4e59b44847b379578588920cA78FbF26c0B4956C;
     address HUFFCREATE2DEPLOYER;
 
     function setUp() public {
-        require(CREATE2DEPLOYER.code.length > 0, "CREATE2DEPLOYER NOT DEPLOYED!");
 
         bytes memory bytecode = vm.compile("src/CREATE2SAFEDEPLOYER.huff");
-        (bool sucess, bytes memory response) = CREATE2DEPLOYER.call(
+        (bool sucess, bytes memory response) = CREATE2_FACTORY.call(
             abi.encodePacked(
                 bytes32(0xdd6e37e0620a60f41055331e8d0d92956e44eeba56d3192dfd65e1aa1b91f6c5), // salt
                 bytecode
@@ -33,7 +31,7 @@ contract CounterTest is Test {
         HUFFCREATE2DEPLOYER = deployed;
     }
 
-    function test_deployCreate2(uint256 start) public {
+    function test_deployCreate2safeCounter(uint256 start) public {
         start = bound(start, 0, type(uint256).max - 1);
 
         // @dev note that the bytecode cant be frontrunned
@@ -50,6 +48,8 @@ contract CounterTest is Test {
             )
         );
 
+        // @dev note that the bytecode is always different due the start param at constructor, therefore the deployed address is always different
+        
         Counter counter;
         assembly {
             counter := mload(add(response, 0x14))
