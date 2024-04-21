@@ -37,6 +37,12 @@ $ forge test
 
 ### Deploy
 
+Deploy all contracts:
+```shell
+$forge script script/DeployAll.s.sol --rpc-url <your_rpc_url> --private-key <your_private_key>
+```
+
+Or deploy as you need:
 ```shell
 $ forge script script/Create2Factory.s.sol --rpc-url <your_rpc_url> --private-key <your_private_key>
 $ forge script script/Create2SafeFactory.s.sol --rpc-url <your_rpc_url> --private-key <your_private_key>
@@ -44,3 +50,25 @@ $ forge script script/Create3Factory.s.sol --rpc-url <your_rpc_url> --private-ke
 ```
 
 > Contract final deployed address of all contracts should be always the same.
+
+### Deployments
+
+#### Arbitrum
+- Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://arbiscan.io/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
+- Create2SafeFactory: [0x00000008C8F9e0892092947ccc041897e8633523](https://arbiscan.io/address/0x00000008C8F9e0892092947ccc041897e8633523)
+- Create3Factory: [0x0000000076D42B9563E28685aE3A7eB304ebD20c](https://arbiscan.io/address/0x0000000076D42B9563E28685aE3A7eB304ebD20c)
+
+#### Ethereum
+- Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://etherscan.io/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
+- Create2SafeFactory: [0x00000008C8F9e0892092947ccc041897e8633523](https://etherscan.io/address/0x00000008C8F9e0892092947ccc041897e8633523)
+- Create3Factory: [0x0000000076D42B9563E28685aE3A7eB304ebD20c](https://etherscan.io/address/0x0000000076D42B9563E28685aE3A7eB304ebD20c)
+
+#### BSC
+- Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://bscscan.com/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
+- Create2SafeFactory: [0x00000008C8F9e0892092947ccc041897e8633523](https://bscscan.com/address/0x00000008C8F9e0892092947ccc041897e8633523)
+- Create3Factory: [0x0000000076D42B9563E28685aE3A7eB304ebD20c](https://bscscan.com/address/0x0000000076D42B9563E28685aE3A7eB304ebD20c)
+
+#### Polygon
+- Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://polygonscan.com/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
+- Create2SafeFactory: [0x00000008C8F9e0892092947ccc041897e8633523](https://polygonscan.com/address/0x00000008C8F9e0892092947ccc041897e8633523)
+- Create3Factory: [0x0000000076D42B9563E28685aE3A7eB304ebD20c](https://polygonscan.com/address/0x0000000076D42B9563E28685aE3A7eB304ebD20c)
