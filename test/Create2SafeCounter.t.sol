@@ -12,7 +12,6 @@ contract CounterTest is Test {
     address HUFFCREATE2DEPLOYER;
 
     function setUp() public {
-
         bytes memory bytecode = vm.compile("src/CREATE2SAFEDEPLOYER.huff");
         (bool sucess, bytes memory response) = CREATE2_FACTORY.call(
             abi.encodePacked(
@@ -49,7 +48,7 @@ contract CounterTest is Test {
         );
 
         // @dev note that the bytecode is always different due the start param at constructor, therefore the deployed address is always different
-        
+
         Counter counter;
         assembly {
             counter := mload(add(response, 0x14))

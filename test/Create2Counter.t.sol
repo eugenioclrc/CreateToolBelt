@@ -12,7 +12,6 @@ contract CounterTest is Test {
     address HUFFCREATE2DEPLOYER;
 
     function setUp() public {
-
         bytes memory bytecode = vm.compile("src/CREATE2DEPLOYER.huff");
         // CREATE2_FACTORY create2 contract from https://github.com/Arachnid/deterministic-deployment-proxy.
         (bool sucess, bytes memory response) = CREATE2_FACTORY.call(
