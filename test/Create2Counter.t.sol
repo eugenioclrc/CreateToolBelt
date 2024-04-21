@@ -30,18 +30,20 @@ contract CounterTest is Test {
         HUFFCREATE2DEPLOYER = deployed;
     }
 
-    function test_Increment() public {
+    function test_Increment(uint256 start) public {
+        start = bound(start, 0, type(uint256).max - 1);
         (bool sucess, bytes memory response) = HUFFCREATE2DEPLOYER.call(abi.encodePacked(
             bytes32(keccak256("salt")),
-            type(Counter).creationCode)
+            abi.encodePacked(type(Counter).creationCode), start)
         );
         assertTrue(sucess, "Failed to deploy Counter");
         Counter counter;
         assembly {
             counter := mload(add(response, 0x14))
         }
-        counter.increment();
 
-        assertEq(counter.number(), 1, "Counter should be 1");
+        assertEq(counter.number(), start, "Counter should be start number");
+        counter.increment();
+        assertEq(counter.number(), start + 1, "Counter should be start number + 1");
     }
 }

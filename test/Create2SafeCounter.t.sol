@@ -16,7 +16,7 @@ contract CounterTest is Test {
 
         bytes memory bytecode = vm.compile("src/CREATE2SAFEDEPLOYER.huff");
         (bool sucess, bytes memory response) = CREATE2DEPLOYER.call(abi.encodePacked(
-            bytes32(0x4e59b44847b379578588920ca78fbf26c0b4956c93cba124c4fab5b9c54d01c0), // salt
+            bytes32(0xdd6e37e0620a60f41055331e8d0d92956e44eeba56d3192dfd65e1aa1b91f6c5), // salt
             bytecode
         ));
         assertTrue(sucess, "Failed to deploy CREATE2DEPLOYER");
@@ -26,7 +26,7 @@ contract CounterTest is Test {
             deployed := mload(add(response, 0x14))
         }
 
-        //assertEq(deployed, 0x0000000004E9754d5589C4C3859dB89282Bedb2a, "Failed to deploy CREATE2DEPLOYER");
+        assertEq(deployed, 0x00000008C8F9e0892092947ccc041897e8633523, "Failed to deploy CREATE2DEPLOYER");
         HUFFCREATE2DEPLOYER = deployed;
     }
 
