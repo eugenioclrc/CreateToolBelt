@@ -36,13 +36,7 @@ contract Create3FactoryTest is Test {
         start = bound(start, 0, type(uint256).max - 1);
 
         (bool sucess, bytes memory response) =
-            CREATE3FACTORY.call(
-                abi.encodePacked(
-                    bytes32(keccak256("salt")), 
-                    type(Counter).creationCode, 
-                    start
-                )
-            );
+            CREATE3FACTORY.call(abi.encodePacked(bytes32(keccak256("salt")), type(Counter).creationCode, start));
         assertFalse(sucess, "show return false due missing frontrun protection");
 
         (sucess, response) = CREATE3FACTORY.call(
