@@ -56,22 +56,22 @@ $ forge script script/Create3Factory.s.sol --rpc-url <your_rpc_url> --private-ke
 #### Arbitrum
 - Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://arbiscan.io/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
 - Create2SafeFactory: [0x00000008C8F9e0892092947ccc041897e8633523](https://arbiscan.io/address/0x00000008C8F9e0892092947ccc041897e8633523)
-- Create3Factory: [0x0000000076D42B9563E28685aE3A7eB304ebD20c](https://arbiscan.io/address/0x0000000076D42B9563E28685aE3A7eB304ebD20c)
+- Create3Factory: [0x00000000231C09b34010207Ca8F37bf1f9dBac7c](https://arbiscan.io/address/0x00000000231C09b34010207Ca8F37bf1f9dBac7c)
 
 #### Ethereum
 - Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://etherscan.io/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
 - Create2SafeFactory: [0x00000008C8F9e0892092947ccc041897e8633523](https://etherscan.io/address/0x00000008C8F9e0892092947ccc041897e8633523)
-- Create3Factory: [0x0000000076D42B9563E28685aE3A7eB304ebD20c](https://etherscan.io/address/0x0000000076D42B9563E28685aE3A7eB304ebD20c)
+- Create3Factory: [0x00000000231C09b34010207Ca8F37bf1f9dBac7c](https://etherscan.io/address/0x00000000231C09b34010207Ca8F37bf1f9dBac7c)
 
 #### BSC
 - Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://bscscan.com/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
 - Create2SafeFactory: [0x00000008C8F9e0892092947ccc041897e8633523](https://bscscan.com/address/0x00000008C8F9e0892092947ccc041897e8633523)
-- Create3Factory: [0x0000000076D42B9563E28685aE3A7eB304ebD20c](https://bscscan.com/address/0x0000000076D42B9563E28685aE3A7eB304ebD20c)
+- Create3Factory: [0x00000000231C09b34010207Ca8F37bf1f9dBac7c](https://bscscan.com/address/0x00000000231C09b34010207Ca8F37bf1f9dBac7c)
 
 #### Polygon
 - Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://polygonscan.com/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
 - Create2SafeFactory: [0x00000008C8F9e0892092947ccc041897e8633523](https://polygonscan.com/address/0x00000008C8F9e0892092947ccc041897e8633523)
-- Create3Factory: [0x0000000076D42B9563E28685aE3A7eB304ebD20c](https://polygonscan.com/address/0x0000000076D42B9563E28685aE3A7eB304ebD20c)
+- Create3Factory: [0x00000000231C09b34010207Ca8F37bf1f9dBac7c](https://polygonscan.com/address/0x00000000231C09b34010207Ca8F37bf1f9dBac7c)
 
 
 ### Deployments Testnet
@@ -79,4 +79,4 @@ $ forge script script/Create3Factory.s.sol --rpc-url <your_rpc_url> --private-ke
 #### Sepolia
 - Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://sepolia.etherscan.io/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
 - Create2SafeFactory: [0x00000008C8F9e0892092947ccc041897e8633523](https://sepolia.etherscan.io/address/0x00000008C8F9e0892092947ccc041897e8633523)
-- Create3Factory: [0x0000000076D42B9563E28685aE3A7eB304ebD20c](https://sepolia.etherscan.io/address/0x0000000076D42B9563E28685aE3A7eB304ebD20c)
+- Create3Factory: [0x00000000231C09b34010207Ca8F37bf1f9dBac7c](https://sepolia.etherscan.io/address/0x00000000231C09b34010207Ca8F37bf1f9dBac7c)

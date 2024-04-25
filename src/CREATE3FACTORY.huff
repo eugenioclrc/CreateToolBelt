@@ -1,12 +1,18 @@
 
 // Proxy Constants
 #define constant PROXY_BYTECODE =      0x69363d3d37363d34f033ff3d52600a6016f30000000000000000000000000000
-#define constant PROXY_BYTECODE_HASH = 0xa58613f86adbc0573cef164d1558bf6d30464e5cd9ea80ff0d900f04b870a303
+#define constant PROXY_BYTECODE_HASH = 0xbb908235335e3d6acecf544d682abde3fae769324b91ff66eae03c7c0fc2a952
 
 #define macro BUILD_SALT(z0) = takes (0) returns (1) { 
-  __RIGHTPAD(0xFFFFFFFFFFFFFFFFFFFFFFFF)
-  <z0> calldataload and  
-  origin add
+         
+  <z0> calldataload // caller 20 bytes - salt 12 bytes
+  dup1 0x60 shr     // caller-salt, caller
+  caller eq okeyJump jumpi
+
+  // wrong caller, frontrun protection
+  <z0> <z0> revert
+
+  okeyJump:
 }
 
 #define macro COPYCODE(z0) = takes (0) returns (1) { 

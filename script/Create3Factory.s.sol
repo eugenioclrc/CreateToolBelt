@@ -17,7 +17,7 @@ contract DeployScript is Script {
         vm.startBroadcast();
         (bool sucess, bytes memory response) = CREATE2_FACTORY.call(
             abi.encodePacked(
-                bytes32(0x4e59b44847b379578588920ca78fbf26c0b4956c0aff5470784fa47dae490020), // salt
+                bytes32(0x4e59b44847b379578588920ca78fbf26c0b4956c591861feef4bd658ae380080), // salt
                 bytecode
             )
         );
@@ -28,6 +28,6 @@ contract DeployScript is Script {
             create3Factory := mload(add(response, 0x14))
         }
 
-        require(create3Factory == 0x0000000076D42B9563E28685aE3A7eB304ebD20c, "Failed to deploy CREATE3FACTORY");
+        require(create3Factory == 0x00000000231C09b34010207Ca8F37bf1f9dBac7c, "Failed to deploy CREATE3FACTORY");
     }
 }
