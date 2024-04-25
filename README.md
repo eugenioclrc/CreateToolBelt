@@ -51,7 +51,7 @@ $ forge script script/Create3Factory.s.sol --rpc-url <your_rpc_url> --private-ke
 
 > Contract final deployed address of all contracts should be always the same.
 
-### Deployments
+### Deployments Mainnet
 
 #### Arbitrum
 - Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://arbiscan.io/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
@@ -72,3 +72,11 @@ $ forge script script/Create3Factory.s.sol --rpc-url <your_rpc_url> --private-ke
 - Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://polygonscan.com/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
 - Create2SafeFactory: [0x00000008C8F9e0892092947ccc041897e8633523](https://polygonscan.com/address/0x00000008C8F9e0892092947ccc041897e8633523)
 - Create3Factory: [0x0000000076D42B9563E28685aE3A7eB304ebD20c](https://polygonscan.com/address/0x0000000076D42B9563E28685aE3A7eB304ebD20c)
+
+
+### Deployments Testnet
+
+#### Sepolia
+- Create2Factory: [0x0000000004E9754d5589C4C3859dB89282Bedb2a](https://sepolia.etherscan.io/address/0x0000000004E9754d5589C4C3859dB89282Bedb2a)
+- Create2SafeFactory: [0x00000008C8F9e0892092947ccc041897e8633523](https://sepolia.etherscan.io/address/0x00000008C8F9e0892092947ccc041897e8633523)
+- Create3Factory: [0x0000000076D42B9563E28685aE3A7eB304ebD20c](https://sepolia.etherscan.io/address/0x0000000076D42B9563E28685aE3A7eB304ebD20c)
