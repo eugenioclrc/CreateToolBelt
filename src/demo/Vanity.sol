@@ -22,16 +22,23 @@ contract Vanity is ERC721("Vanity", "VANITY") {
             commitReveal[commit] < block.timestamp && (commitReveal[commit] + 1 hours) > block.timestamp, "!reserved"
         );
         minted[_salt] = true;
-        _mint(to, uint256(bytes32(_salt)));
+        _mint(to, uint256(uint96(_salt)));
     }
 
     function deploy(uint256 id, bytes memory code) external returns (address deployed) {
-        require(ownerOf(id) == msg.sender, "!owner");
+        require(_ownerOf[id] == msg.sender, "!owner");
         _burn(id);
 
         (bool sucess, bytes memory response) = CREATE3FACTORY.call(
-            abi.encodePacked(bytes32(abi.encodePacked(address(this), bytes12(bytes32(uint256(id))))), code)
-        );
+            abi.encodePacked(
+                bytes32(
+                    abi.encodePacked(
+                        address(this), 
+                        bytes12(uint96(id))
+                    )
+                ), 
+                code
+        ));
         require(sucess, "deploy fail");
         assembly {
             deployed := mload(add(response, 0x14))
@@ -39,8 +46,9 @@ contract Vanity is ERC721("Vanity", "VANITY") {
     }
 
     function associatedAddress(uint256 id) external view returns (address) {
-        require(_ownerOf[id] == address(0), "!exist");
-        return CREATE3FACTORYPredict.getDeployed(address(this), bytes12(bytes32(id)));
+        bytes12 salt = bytes12(uint96(id));
+        require(minted[salt], "!exist");
+        return CREATE3FACTORYPredict.getDeployed(address(this), salt);
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
